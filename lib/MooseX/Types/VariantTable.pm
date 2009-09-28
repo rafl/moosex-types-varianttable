@@ -32,6 +32,17 @@ has variants => (
     trigger  => sub { $_[0]->_clear_sorted_variants },
 );
 
+has ambigious_match_callback => (
+    is      => 'ro',
+    isa     => 'CodeRef',
+    default => sub {
+        sub {
+            my ($self, $value, @matches) = @_;
+            croak "Ambiguous match " . join(", ", map { $_->{type} } @matches);
+        };
+    },
+);
+
 sub BUILD {
     my ( $self, $params ) = @_;
 
@@ -183,7 +194,7 @@ sub _find_variant {
         if ( @matches == 1 ) {
             return $matches[0];
         } elsif ( @matches > 1 ) {
-            croak "Ambiguous match " . join(", ", map { $_->{type} } @matches);
+            $self->ambigious_match_callback->($self, $value, @matches);
         }
     }
 
@@ -247,6 +258,18 @@ This object is used internally by L<Moose::Meta::Method::VariantTable> and
 L<MooseX::Types::VariantTable::Declare> to provide primitive multi
 sub support.
 
+=head1 ATTRIBUTES
+
+=head2 ambigious_match_callback
+
+A code reference that'll be executed when find_variant found more than one
+matching variant for a value. It defaults to something that simply croaks with
+an error message like this:
+
+  Ambiguous match %s
+
+where %s contains a list of stringified types that matched.
+
 =head1 METHODS
 
 =over 4
@@ -292,6 +315,8 @@ gain role composition.
 =head1 AUTHOR
 
 Yuval Kogman E<lt>nothingmuch@woobling.orgE<gt>
+
+Florian Ragwitz E<lt>rafl@debian.orgE<gt>
 
 =head1 COPYRIGHT
 
