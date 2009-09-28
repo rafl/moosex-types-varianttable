@@ -14,7 +14,7 @@ with qw(MooseX::Clone);
 
 use Carp qw(croak);
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 has _sorted_variants => (
     traits => [qw(NoClone)],
