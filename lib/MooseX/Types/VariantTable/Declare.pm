@@ -29,6 +29,7 @@ sub variant_method ($$$) {
         $meta_method = Moose::Meta::Method::VariantTable->new(
             name => $name,
             class => $meta,
+            package_name => $class,
         );
 
         $meta->add_method( $name => $meta_method );
