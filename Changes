@@ -1,3 +1,6 @@
+0.04  Tue, 05 Jan 2010 20:37:32 +0100
+    - Avoid warnings from Class::MOP.
+
 0.03  Mon, 28 Sep 2009 17:54:35 +0200
     - Implement ambigious_match_callback as a way for users to hook into what
       happens on ambigious matches.
